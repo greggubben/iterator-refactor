@@ -1,17 +1,21 @@
 iterator-refactor README
+========================
 
 This repository holds example files to practice refactoring a series of loops
 to using the iterator pattern.
 
-Requirements:
+Requirements
+------------
 
-Given a list of Countries.
-Find those Countries that have a Top Level Domain (TLD).
-Add the Country's Currency.
-Display the Country Name, 3 char ISO-alpha, TLD, and Currency.
+  * Given a list of Countries.
+  * Filter for only those Countries that have a Top Level Domain (TLD).
+  * Optionally add the Country's Currency.
+  * Display the Country Name, 3 char ISO-alpha, TLD, and Currency.
 
 
-Initial psuedo Code:
+Initial psuedo Code
+-------------------
+
     Loop through Countries and load into memory array.
     Loop through TLD and load into memory array.
     Loop through Currency and load into memory array.
@@ -24,7 +28,9 @@ Initial psuedo Code:
     Loop through Output array and print.
 
 
-Refactored psuedo code:
+Refactored psuedo code
+----------------------
+
     Loop through TLD and load into hash array
     Loop through Currency and load into haah array
     Create iterator for Counties
