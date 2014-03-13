@@ -1,4 +1,3 @@
-Country Name                                            ISO 2-alpha ISO 3-alpha
 AFGHANISTAN                                             AF          AFG        
 ?LAND ISLANDS                                           AX          ALA        
 ALBANIA                                                 AL          ALB        
