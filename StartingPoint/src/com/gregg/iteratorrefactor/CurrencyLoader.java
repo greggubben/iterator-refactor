@@ -26,26 +26,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * @author Gregg Ubben
+ * @author gregg
  * 
  */
-public class CountryLoader extends FileLoader {
+public class CurrencyLoader extends FileLoader {
 
 	private static final int COUNTRY_BEGIN_INDEX = 0;
-	private static final int COUNTRY_END_INDEX = 56;
-	private static final int ISO2ALPHA_BEGIN_INDEX = 56;
-	private static final int ISO2ALPHA_END_INDEX = 68;
-	private static final int ISO3ALPHA_BEGIN_INDEX = 68;
-	private static final int ISO3ALPHA_END_INDEX = 79;
+	private static final int COUNTRY_END_INDEX = 65;
+	private static final int CURRENCY_BEGIN_INDEX = 65;
+	private static final int CURRENCY_END_INDEX = 120;
+	private static final int CURRENCY_CODE_BEGIN_INDEX = 120;
+	private static final int CURRENCY_CODE_END_INDEX = 128;
 
 	/**
-	 * Load the Country File into a Memory Array
+	 * Load the Currency File into a Memory Array
 	 * 
 	 * @param filename
-	 * @return ArrayList of Countries
+	 * @return ArrayList of Currencies
 	 * @throws FileNotFoundException
 	 */
-	public ArrayList<Country> loadFile(String filename)
+	public ArrayList<Currency> loadFile(String filename)
 			throws FileNotFoundException {
 		BufferedReader br = new BufferedReader(new FileReader(filename));
 
@@ -58,19 +58,19 @@ public class CountryLoader extends FileLoader {
 	 * @param br
 	 * @return
 	 */
-	protected ArrayList<Country> parseFile(BufferedReader br) {
-		ArrayList<Country> countries = new ArrayList<Country>();
+	protected ArrayList<Currency> parseFile(BufferedReader br) {
+		ArrayList<Currency> currencies = new ArrayList<Currency>();
 		String row = null;
 		try {
 			while ((row = br.readLine()) != null) {
-				countries.add(parseRow(row));
+				currencies.add(parseRow(row));
 			}
 		} catch (IOException ioe) {
 			// Print the stack trace and return what we have
 			// TODO: This needs better error handling
 			ioe.printStackTrace();
 		}
-		return countries;
+		return currencies;
 	}
 
 	/**
@@ -81,15 +81,15 @@ public class CountryLoader extends FileLoader {
 	 *            Fixed Position Row String read from file
 	 * @return Country Structure Object (null if @row is empty)
 	 */
-	protected Country parseRow(String row) {
-		Country country = null;
+	protected Currency parseRow(String row) {
+		Currency currency = null;
 		if (row != null && row.length() != 0) {
-			country = new Country();
-			country.setCountryName(parseCountryName(row));
-			country.setIso2Alpha(parseIso2Alpha(row));
-			country.setIso3Alpha(parseIso3Alpha(row));
+			currency = new Currency();
+			currency.setCountryName(parseCountryName(row));
+			currency.setCurrencyName(parseCurrencyName(row));
+			currency.setCurrencyCode(parseCurrencyCode(row));
 		}
-		return country;
+		return currency;
 	}
 
 	/**
@@ -106,29 +106,30 @@ public class CountryLoader extends FileLoader {
 	}
 
 	/**
-	 * From a String containing the Row that was read parse the Country ISO
-	 * 2-alpha Code. It is expected to be fixed position row with trailing
-	 * whitespace. The resulting Country ISO 2-alpha Code will be trimmed.
+	 * From a String containing the Row that was read parse the Currency Name.
+	 * It is expected to be fixed position row with trailing whitespace. The
+	 * resulting Currency Name will be trimmed.
 	 * 
 	 * @param row
 	 *            Fixed Position Row String read from file
-	 * @return Trimmed Country ISO 2-alpha Code as String
+	 * @return Trimmed Currency Name as String
 	 */
-	protected String parseIso2Alpha(String row) {
-		return parseColumn(row, ISO2ALPHA_BEGIN_INDEX, ISO2ALPHA_END_INDEX);
+	protected String parseCurrencyName(String row) {
+		return parseColumn(row, CURRENCY_BEGIN_INDEX, CURRENCY_END_INDEX);
 	}
 
 	/**
-	 * From a String containing the Row that was read parse the Country ISO
-	 * 3-alpha Code. It is expected to be fixed position row with trailing
-	 * whitespace. The resulting Country ISO 3-alpha Code will be trimmed.
+	 * From a String containing the Row that was read parse the Currency Code.
+	 * It is expected to be fixed position row with trailing whitespace. The
+	 * resulting Currency Code will be trimmed.
 	 * 
 	 * @param row
 	 *            Fixed Position Row String read from file
-	 * @return Trimmed Country ISO 3-alpha Code as String
+	 * @return Trimmed Currency Code as String
 	 */
-	protected String parseIso3Alpha(String row) {
-		return parseColumn(row, ISO3ALPHA_BEGIN_INDEX, ISO3ALPHA_END_INDEX);
+	protected String parseCurrencyCode(String row) {
+		return parseColumn(row, CURRENCY_CODE_BEGIN_INDEX,
+				CURRENCY_CODE_END_INDEX);
 	}
 
 }

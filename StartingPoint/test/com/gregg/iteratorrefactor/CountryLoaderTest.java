@@ -28,7 +28,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class CountryLoaderTest {
@@ -91,7 +90,7 @@ public class CountryLoaderTest {
 	 */
 	@Test
 	public void parseCountryFromNull() {
-		assertNull(countryLoader.parseCountryRow(null));
+		assertNull(countryLoader.parseRow(null));
 	}
 
 	/**
@@ -99,7 +98,7 @@ public class CountryLoaderTest {
 	 */
 	@Test
 	public void parseCountryFromEmptyRow() {
-		assertNull(countryLoader.parseCountryRow(EMPTY_ROW));
+		assertNull(countryLoader.parseRow(EMPTY_ROW));
 	}
 
 	/**
@@ -112,7 +111,7 @@ public class CountryLoaderTest {
 		fullCountry.setCountryName(FULL_COUNTRY_NAME);
 		fullCountry.setIso2Alpha(FULL_ISO2ALPHA);
 		fullCountry.setIso3Alpha(FULL_ISO3ALPHA);
-		assertEquals(fullCountry, countryLoader.parseCountryRow(FULL_ROW));
+		assertEquals(fullCountry, countryLoader.parseRow(FULL_ROW));
 	}
 
 	/**
@@ -125,7 +124,7 @@ public class CountryLoaderTest {
 		fullCountry.setCountryName(NORMAL_COUNTRY_NAME);
 		fullCountry.setIso2Alpha(NORMAL_ISO2ALPHA);
 		fullCountry.setIso3Alpha(NORMAL_ISO3ALPHA);
-		assertEquals(fullCountry, countryLoader.parseCountryRow(NORMAL_ROW));
+		assertEquals(fullCountry, countryLoader.parseRow(NORMAL_ROW));
 	}
 
 	/**
@@ -209,12 +208,12 @@ public class CountryLoaderTest {
 	 * 
 	 * @throws FileNotFoundException
 	 */
-	@Ignore("Test has external dependencies")
+	// @Ignore("Test has external dependencies")
 	@Test
 	public void parseCountCountryFromRealCountryFile()
 			throws FileNotFoundException {
 		assertEquals(260,
-				countryLoader.loadFile("../data/ISO_Country_Codes.txt").size());
+				countryLoader.loadFile("../data/iso_country_codes.txt").size());
 	}
 
 }
