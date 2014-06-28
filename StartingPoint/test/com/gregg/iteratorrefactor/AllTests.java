@@ -25,13 +25,15 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import com.gregg.iteratorrefactor.domain.CountryTest;
 import com.gregg.iteratorrefactor.domain.CurrencyTest;
+import com.gregg.iteratorrefactor.domain.TopLevelDomainTest;
 import com.gregg.iteratorrefactor.loader.CountryLoaderTest;
 import com.gregg.iteratorrefactor.loader.CurrencyLoaderTest;
 import com.gregg.iteratorrefactor.loader.TopLevelDomainLoaderTest;
 import com.gregg.iteratorrefactor.loader.util.FileLoaderTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ CountryTest.class, CurrencyTest.class, FileLoaderTest.class,
+@SuiteClasses({ CountryTest.class, CurrencyTest.class,
+		TopLevelDomainTest.class, FileLoaderTest.class,
 		CountryLoaderTest.class, CurrencyLoaderTest.class,
 		TopLevelDomainLoaderTest.class })
 public class AllTests {

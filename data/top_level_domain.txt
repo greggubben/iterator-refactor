@@ -1,4 +1,3 @@
-# Version 2014022700, Last Updated Thu Feb 27 07:07:01 2014 UTC
 AC
 ACADEMY
 ACTOR

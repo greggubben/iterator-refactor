@@ -19,12 +19,43 @@
 
 package com.gregg.iteratorrefactor.loader.util;
 
+
 public class FileLoader {
 
 	public FileLoader() {
 		super();
 	}
 
+	/**
+	 * Load the Country File into a Memory Array
+	 * 
+	 * @param filename
+	 * @return ArrayList of Top Level Domains
+	 * @throws FileNotFoundException
+	 */
+	/*
+	 * public ArrayList<E> loadFile(String filename) throws
+	 * FileNotFoundException { BufferedReader br = new BufferedReader(new
+	 * FileReader(filename));
+	 * 
+	 * return parseFile(br); }
+	 */
+	/**
+	 * Parse row by row through a file.
+	 * 
+	 * @param br
+	 * @return
+	 */
+	/*
+	 * protected ArrayList<E> parseFile(BufferedReader br) { ArrayList<E>
+	 * topLevelDomains = new ArrayList<E>(); String row = null; try { while
+	 * ((row = br.readLine()) != null) { topLevelDomains.add(parseRow(row)); } }
+	 * catch (IOException ioe) { // Print the stack trace and return what we
+	 * have // TODO: This needs better error handling ioe.printStackTrace(); }
+	 * return topLevelDomains; }
+	 * 
+	 * protected abstract E parseRow(String row);
+	 */
 	/**
 	 * From a String containing the Row that was read parse the Column specified
 	 * between begColIndex and endColIndex. It is expected to be fixed position

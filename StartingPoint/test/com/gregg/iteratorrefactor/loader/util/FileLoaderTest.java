@@ -23,8 +23,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.gregg.iteratorrefactor.loader.util.FileLoader;
-
 public class FileLoaderTest {
 
 	private static final String EMPTY_ROW = "";
