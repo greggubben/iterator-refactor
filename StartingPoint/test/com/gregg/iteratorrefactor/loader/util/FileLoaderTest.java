@@ -19,6 +19,12 @@
 package com.gregg.iteratorrefactor.loader.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.StringReader;
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,12 +49,14 @@ public class FileLoaderTest {
 	// Normal Row Constants
 	private static final String NORMAL_ROW = "ARUBA                                                   AW          ABW        ";
 	private static final String NORMAL_FIRST_COLUMN = "ARUBA";
+	private static final String NORMAL_MIDDLE_COLUMN = "AW";
+	private static final String NORMAL_LAST_COLUMN = "ABW";
 
-	FileLoader fileLoader;
+	TestLoader fileLoader;
 
 	@Before
 	public void setUp() throws Exception {
-		fileLoader = new FileLoader();
+		fileLoader = new TestLoader();
 	}
 
 	/**
@@ -87,7 +95,7 @@ public class FileLoaderTest {
 
 	/**
 	 * Test the Column Parse routine for a column that ends on the last
-	 * characted of the row (i.e. Last Column) and starts after the first
+	 * character of the row (i.e. Last Column) and starts after the first
 	 * character. This test makes sure then entire column is parsed with no
 	 * extras. Should get All values entered for the Last Column.
 	 */
@@ -137,6 +145,300 @@ public class FileLoaderTest {
 	public void parseColumnStartsAfterRowEnds() {
 		assertEquals("", fileLoader.parseColumn(NORMAL_FIRST_COLUMN,
 				LAST_COLUMN_BEGIN, LAST_COLUMN_END));
+	}
+
+	/**
+	 * Test when a Null Row is parsed the returned Test Structure is null.
+	 */
+	@Test
+	public void parseTestStructureFromNull() {
+		assertNull(fileLoader.parseRow(null));
+	}
+
+	/**
+	 * Test when an Empty Row is parsed the returned Test Structure is null.
+	 */
+	@Test
+	public void parseTestStructureFromEmptyRow() {
+		assertNull(fileLoader.parseRow(EMPTY_ROW));
+	}
+
+	/**
+	 * Test when a Single Row is read from a Single Row File.
+	 */
+	@Test
+	public void parseTestStructureFromSingleRowFile() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(NORMAL_ROW);
+		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
+		TestStructure fullTestStructure = new TestStructure();
+		fullTestStructure.setFirstColumn(NORMAL_FIRST_COLUMN);
+		fullTestStructure.setMiddleColumn(NORMAL_MIDDLE_COLUMN);
+		fullTestStructure.setLastColumn(NORMAL_LAST_COLUMN);
+		assertEquals(fullTestStructure, fileLoader.parseFile(br).get(0));
+	}
+
+	/**
+	 * Test Count of Rows read from a Multi Row File.
+	 */
+	@Test
+	public void parseCountTestStructureFromMultipleRowFile() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(NORMAL_ROW);
+		sb.append("\n");
+		sb.append(FULL_ROW);
+		sb.append("\n");
+		sb.append(FULL_ROW);
+		sb.append("\n");
+		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
+		TestStructure fullTestStructure = new TestStructure();
+		fullTestStructure.setFirstColumn(NORMAL_FIRST_COLUMN);
+		fullTestStructure.setMiddleColumn(NORMAL_MIDDLE_COLUMN);
+		fullTestStructure.setLastColumn(NORMAL_LAST_COLUMN);
+		assertEquals(3, fileLoader.parseFile(br).size());
+	}
+
+	/**
+	 * Test when First Row is read from a Multi Row File.
+	 */
+	@Test
+	public void parseFirstTestStructureFromMultipleRowFile() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(NORMAL_ROW);
+		sb.append("\n");
+		sb.append(FULL_ROW);
+		sb.append("\n");
+		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
+		TestStructure fullTestStructure = new TestStructure();
+		fullTestStructure.setFirstColumn(NORMAL_FIRST_COLUMN);
+		fullTestStructure.setMiddleColumn(NORMAL_MIDDLE_COLUMN);
+		fullTestStructure.setLastColumn(NORMAL_LAST_COLUMN);
+		assertEquals(fullTestStructure, fileLoader.parseFile(br).get(0));
+	}
+
+	/**
+	 * Test when Last Row is read from a Multi Row File.
+	 */
+	@Test
+	public void parseLastTestStructureFromMultipleRowFile() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(FULL_ROW);
+		sb.append("\n");
+		sb.append(FULL_ROW);
+		sb.append("\n");
+		sb.append(FULL_ROW);
+		sb.append("\n");
+		sb.append(NORMAL_ROW);
+		sb.append("\n");
+		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
+		TestStructure fullTestStructure = new TestStructure();
+		fullTestStructure.setFirstColumn(NORMAL_FIRST_COLUMN);
+		fullTestStructure.setMiddleColumn(NORMAL_MIDDLE_COLUMN);
+		fullTestStructure.setLastColumn(NORMAL_LAST_COLUMN);
+		ArrayList<TestStructure> testStructures = fileLoader.parseFile(br);
+		assertEquals(fullTestStructure,
+				testStructures.get(testStructures.size() - 1));
+	}
+
+	/**
+	 * Test Count of Rows read from the Real Country File.
+	 * 
+	 * @throws FileNotFoundException
+	 */
+	// @Ignore("Test has external dependencies")
+	@Test
+	public void parseCountTestStructureFromRealFile()
+			throws FileNotFoundException {
+		assertEquals(260, fileLoader.loadFile("../data/iso_country_codes.txt")
+				.size());
+	}
+
+	/**
+	 * Test class for testing the File Loader since it is an abstract.
+	 * 
+	 */
+	public class TestLoader extends FileLoader<TestStructure> {
+
+		/**
+		 * From a String of Fixed Position characters parse each field and
+		 * populate a Test Structure.
+		 * 
+		 * @param row
+		 *            Fixed Position Row String read from file
+		 * @return Test Structure Object (null if @row is empty)
+		 */
+		protected TestStructure parseRow(String row) {
+			TestStructure country = null;
+			if (row != null && row.length() != 0) {
+				country = new TestStructure();
+				country.setFirstColumn(parseFirstColumn(row));
+				country.setMiddleColumn(parseMiddleColumn(row));
+				country.setLastColumn(parseLastColumn(row));
+			}
+			return country;
+		}
+
+		/**
+		 * From a String containing the Row that was read parse the First
+		 * Column. It is expected to be fixed position row with trailing
+		 * whitespace. The resulting First Column will be trimmed.
+		 * 
+		 * @param row
+		 *            Fixed Position Row String read from file
+		 * @return Trimmed First Column as String
+		 */
+		protected String parseFirstColumn(String row) {
+			return parseColumn(row, FIRST_COLUMN_BEGIN, FIRST_COLUMN_END);
+		}
+
+		/**
+		 * From a String containing the Row that was read parse the Middle
+		 * Column. It is expected to be fixed position row with trailing
+		 * whitespace. The resulting Middle Column will be trimmed.
+		 * 
+		 * @param row
+		 *            Fixed Position Row String read from file
+		 * @return Trimmed Middle Column as String
+		 */
+		protected String parseMiddleColumn(String row) {
+			return parseColumn(row, MIDDLE_COLUMN_BEGIN, MIDDLE_COLUMN_END);
+		}
+
+		/**
+		 * From a String containing the Row that was read parse the Last Column.
+		 * It is expected to be fixed position row with trailing whitespace. The
+		 * resulting Last Column will be trimmed.
+		 * 
+		 * @param row
+		 *            Fixed Position Row String read from file
+		 * @return Trimmed Last Column as String
+		 */
+		protected String parseLastColumn(String row) {
+			return parseColumn(row, LAST_COLUMN_BEGIN, LAST_COLUMN_END);
+		}
+
+	}
+
+	/**
+	 * Test Structure for testing the abstract File Loader class.
+	 * 
+	 */
+	public class TestStructure {
+
+		private String firstColumn;
+		private String middleColumn;
+		private String lastColumn;
+
+		public boolean equals(Object anObject) {
+			if (this == anObject) {
+				return true;
+			}
+			if (anObject instanceof TestStructure) {
+				TestStructure compareTestStructure = (TestStructure) anObject;
+				if (sameFirstColumn(compareTestStructure)
+						&& sameMiddleColumn(compareTestStructure)
+						&& sameLastColumn(compareTestStructure)) {
+					return true;
+				}
+			}
+			return false;
+
+		}
+
+		/**
+		 * Check to see if the First Columns are the same
+		 * 
+		 * @param compareTestStructure
+		 * @return
+		 */
+		private boolean sameFirstColumn(TestStructure compareTestStructure) {
+			return (this.firstColumn == null && compareTestStructure
+					.getFirstColumn() == null)
+					|| (this.firstColumn != null && this.firstColumn
+							.equals(compareTestStructure.getFirstColumn()));
+		}
+
+		/**
+		 * Check to see if the Middle Columns are the same
+		 * 
+		 * @param compareTestStructure
+		 * @return
+		 */
+		private boolean sameMiddleColumn(TestStructure compareTestStructure) {
+			return (this.middleColumn == null && compareTestStructure
+					.getMiddleColumn() == null)
+					|| (this.middleColumn != null && this.middleColumn
+							.equals(compareTestStructure.getMiddleColumn()));
+		}
+
+		/**
+		 * Check to see if the Last Columns are the same
+		 * 
+		 * @param compareTestStructure
+		 * @return
+		 */
+		private boolean sameLastColumn(TestStructure compareTestStructure) {
+			return (this.lastColumn == null && compareTestStructure
+					.getLastColumn() == null)
+					|| (this.lastColumn != null && this.lastColumn
+							.equals(compareTestStructure.getLastColumn()));
+		}
+
+		public int hashCode() {
+			assert false : "hashCode not designed";
+			return 42; // any arbitrary constant will do
+		}
+
+		/**
+		 * @return the firstColumn
+		 */
+		public String getFirstColumn() {
+			return firstColumn;
+		}
+
+		/**
+		 * @return the middleColumn
+		 */
+		public String getMiddleColumn() {
+			return middleColumn;
+		}
+
+		/**
+		 * @return the lastColumn
+		 */
+		public String getLastColumn() {
+			return lastColumn;
+		}
+
+		/**
+		 * @param firstColumn
+		 *            the firstColumn to set
+		 */
+		public void setFirstColumn(String firstCol) {
+			this.firstColumn = firstCol;
+		}
+
+		/**
+		 * @param middleColumn
+		 *            the middleColumn to set
+		 */
+		public void setMiddleColumn(String middleCol) {
+			this.middleColumn = middleCol;
+		}
+
+		/**
+		 * @param lastColumn
+		 *            the lastColumn to set
+		 */
+		public void setLastColumn(String lastCol) {
+			this.lastColumn = lastCol;
+		}
+
+		public String toString() {
+			return "First Column='" + this.firstColumn + "'; Second Column='"
+					+ this.middleColumn + "'; Last Column='" + this.lastColumn
+					+ "'";
+		}
 	}
 
 }

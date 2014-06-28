@@ -20,18 +20,11 @@
 package com.gregg.iteratorrefactor.loader;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.StringReader;
-import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.gregg.iteratorrefactor.domain.Country;
-import com.gregg.iteratorrefactor.loader.CountryLoader;
 
 public class CountryLoaderTest {
 
@@ -89,22 +82,6 @@ public class CountryLoaderTest {
 	}
 
 	/**
-	 * Test when a Null Row is parsed the returned Country Structure is null.
-	 */
-	@Test
-	public void parseCountryFromNull() {
-		assertNull(countryLoader.parseRow(null));
-	}
-
-	/**
-	 * Test when an Empty Row is parsed the returned Country Structure is null.
-	 */
-	@Test
-	public void parseCountryFromEmptyRow() {
-		assertNull(countryLoader.parseRow(EMPTY_ROW));
-	}
-
-	/**
 	 * Test when a Full Row is parsed the returned Country Structure contains
 	 * each field.
 	 */
@@ -128,95 +105,6 @@ public class CountryLoaderTest {
 		fullCountry.setIso2Alpha(NORMAL_ISO2ALPHA);
 		fullCountry.setIso3Alpha(NORMAL_ISO3ALPHA);
 		assertEquals(fullCountry, countryLoader.parseRow(NORMAL_ROW));
-	}
-
-	/**
-	 * Test when a Single Row is read from a Single Row File.
-	 */
-	@Test
-	public void parseCountryFromSingleRowFile() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(NORMAL_ROW);
-		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
-		Country fullCountry = new Country();
-		fullCountry.setCountryName(NORMAL_COUNTRY_NAME);
-		fullCountry.setIso2Alpha(NORMAL_ISO2ALPHA);
-		fullCountry.setIso3Alpha(NORMAL_ISO3ALPHA);
-		assertEquals(fullCountry, countryLoader.parseFile(br).get(0));
-	}
-
-	/**
-	 * Test Count of Rows read from a Multi Row File.
-	 */
-	@Test
-	public void parseCountCountryFromMultipleRowFile() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(NORMAL_ROW);
-		sb.append("\n");
-		sb.append(FULL_ROW);
-		sb.append("\n");
-		sb.append(FULL_ROW);
-		sb.append("\n");
-		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
-		Country fullCountry = new Country();
-		fullCountry.setCountryName(NORMAL_COUNTRY_NAME);
-		fullCountry.setIso2Alpha(NORMAL_ISO2ALPHA);
-		fullCountry.setIso3Alpha(NORMAL_ISO3ALPHA);
-		assertEquals(3, countryLoader.parseFile(br).size());
-	}
-
-	/**
-	 * Test when First Row is read from a Multi Row File.
-	 */
-	@Test
-	public void parseFirstCountryFromMultipleRowFile() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(NORMAL_ROW);
-		sb.append("\n");
-		sb.append(FULL_ROW);
-		sb.append("\n");
-		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
-		Country fullCountry = new Country();
-		fullCountry.setCountryName(NORMAL_COUNTRY_NAME);
-		fullCountry.setIso2Alpha(NORMAL_ISO2ALPHA);
-		fullCountry.setIso3Alpha(NORMAL_ISO3ALPHA);
-		assertEquals(fullCountry, countryLoader.parseFile(br).get(0));
-	}
-
-	/**
-	 * Test when Last Row is read from a Multi Row File.
-	 */
-	@Test
-	public void parseLastCountryFromMultipleRowFile() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(FULL_ROW);
-		sb.append("\n");
-		sb.append(FULL_ROW);
-		sb.append("\n");
-		sb.append(FULL_ROW);
-		sb.append("\n");
-		sb.append(NORMAL_ROW);
-		sb.append("\n");
-		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
-		Country fullCountry = new Country();
-		fullCountry.setCountryName(NORMAL_COUNTRY_NAME);
-		fullCountry.setIso2Alpha(NORMAL_ISO2ALPHA);
-		fullCountry.setIso3Alpha(NORMAL_ISO3ALPHA);
-		ArrayList<Country> counties = countryLoader.parseFile(br);
-		assertEquals(fullCountry, counties.get(counties.size() - 1));
-	}
-
-	/**
-	 * Test Count of Rows read from the Real Country File.
-	 * 
-	 * @throws FileNotFoundException
-	 */
-	// @Ignore("Test has external dependencies")
-	@Test
-	public void parseCountCountryFromRealCountryFile()
-			throws FileNotFoundException {
-		assertEquals(260,
-				countryLoader.loadFile("../data/iso_country_codes.txt").size());
 	}
 
 }

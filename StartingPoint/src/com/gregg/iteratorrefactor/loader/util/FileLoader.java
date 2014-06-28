@@ -19,43 +19,63 @@
 
 package com.gregg.iteratorrefactor.loader.util;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
-public class FileLoader {
+public abstract class FileLoader<E> {
 
 	public FileLoader() {
 		super();
 	}
 
 	/**
-	 * Load the Country File into a Memory Array
+	 * Load the Data File into a Memory Array
 	 * 
 	 * @param filename
-	 * @return ArrayList of Top Level Domains
+	 * @return ArrayList of Data
 	 * @throws FileNotFoundException
 	 */
-	/*
-	 * public ArrayList<E> loadFile(String filename) throws
-	 * FileNotFoundException { BufferedReader br = new BufferedReader(new
-	 * FileReader(filename));
-	 * 
-	 * return parseFile(br); }
-	 */
+
+	public ArrayList<E> loadFile(String filename) throws FileNotFoundException {
+		BufferedReader br = new BufferedReader(new FileReader(filename));
+
+		return parseFile(br);
+	}
+
 	/**
 	 * Parse row by row through a file.
 	 * 
 	 * @param br
 	 * @return
 	 */
-	/*
-	 * protected ArrayList<E> parseFile(BufferedReader br) { ArrayList<E>
-	 * topLevelDomains = new ArrayList<E>(); String row = null; try { while
-	 * ((row = br.readLine()) != null) { topLevelDomains.add(parseRow(row)); } }
-	 * catch (IOException ioe) { // Print the stack trace and return what we
-	 * have // TODO: This needs better error handling ioe.printStackTrace(); }
-	 * return topLevelDomains; }
+	protected ArrayList<E> parseFile(BufferedReader br) {
+		ArrayList<E> records = new ArrayList<E>();
+		String row = null;
+		try {
+			while ((row = br.readLine()) != null) {
+				records.add(parseRow(row));
+			}
+		} catch (IOException ioe) {
+			// Print the stack trace and return what we have
+			// TODO: This needs better error handling
+			ioe.printStackTrace();
+		}
+		return records;
+	}
+
+	/**
+	 * From a String of Fixed Position characters parse each field and populate
+	 * a Data Structure.
 	 * 
-	 * protected abstract E parseRow(String row);
+	 * @param row
+	 *            Fixed Position Row String read from file
+	 * @return Data Structure Object (null if @row is empty)
 	 */
+	protected abstract E parseRow(String row);
+
 	/**
 	 * From a String containing the Row that was read parse the Column specified
 	 * between begColIndex and endColIndex. It is expected to be fixed position

@@ -19,12 +19,6 @@
 
 package com.gregg.iteratorrefactor.loader;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.gregg.iteratorrefactor.domain.Currency;
 import com.gregg.iteratorrefactor.loader.util.FileLoader;
 
@@ -32,7 +26,7 @@ import com.gregg.iteratorrefactor.loader.util.FileLoader;
  * @author gregg
  * 
  */
-public class CurrencyLoader extends FileLoader {
+public class CurrencyLoader extends FileLoader<Currency> {
 
 	private static final int COUNTRY_BEGIN_INDEX = 0;
 	private static final int COUNTRY_END_INDEX = 65;
@@ -40,41 +34,6 @@ public class CurrencyLoader extends FileLoader {
 	private static final int CURRENCY_END_INDEX = 120;
 	private static final int CURRENCY_CODE_BEGIN_INDEX = 120;
 	private static final int CURRENCY_CODE_END_INDEX = 128;
-
-	/**
-	 * Load the Currency File into a Memory Array
-	 * 
-	 * @param filename
-	 * @return ArrayList of Currencies
-	 * @throws FileNotFoundException
-	 */
-	public ArrayList<Currency> loadFile(String filename)
-			throws FileNotFoundException {
-		BufferedReader br = new BufferedReader(new FileReader(filename));
-
-		return parseFile(br);
-	}
-
-	/**
-	 * Parse row by row through a file.
-	 * 
-	 * @param br
-	 * @return
-	 */
-	protected ArrayList<Currency> parseFile(BufferedReader br) {
-		ArrayList<Currency> currencies = new ArrayList<Currency>();
-		String row = null;
-		try {
-			while ((row = br.readLine()) != null) {
-				currencies.add(parseRow(row));
-			}
-		} catch (IOException ioe) {
-			// Print the stack trace and return what we have
-			// TODO: This needs better error handling
-			ioe.printStackTrace();
-		}
-		return currencies;
-	}
 
 	/**
 	 * From a String of Fixed Position characters parse each field and populate

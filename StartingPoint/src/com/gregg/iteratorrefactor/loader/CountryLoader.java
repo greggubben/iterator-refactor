@@ -19,12 +19,6 @@
 
 package com.gregg.iteratorrefactor.loader;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.gregg.iteratorrefactor.domain.Country;
 import com.gregg.iteratorrefactor.loader.util.FileLoader;
 
@@ -32,7 +26,7 @@ import com.gregg.iteratorrefactor.loader.util.FileLoader;
  * @author Gregg Ubben
  * 
  */
-public class CountryLoader extends FileLoader {
+public class CountryLoader extends FileLoader<Country> {
 
 	private static final int COUNTRY_BEGIN_INDEX = 0;
 	private static final int COUNTRY_END_INDEX = 56;
@@ -40,41 +34,6 @@ public class CountryLoader extends FileLoader {
 	private static final int ISO2ALPHA_END_INDEX = 68;
 	private static final int ISO3ALPHA_BEGIN_INDEX = 68;
 	private static final int ISO3ALPHA_END_INDEX = 79;
-
-	/**
-	 * Load the Country File into a Memory Array
-	 * 
-	 * @param filename
-	 * @return ArrayList of Countries
-	 * @throws FileNotFoundException
-	 */
-	public ArrayList<Country> loadFile(String filename)
-			throws FileNotFoundException {
-		BufferedReader br = new BufferedReader(new FileReader(filename));
-
-		return parseFile(br);
-	}
-
-	/**
-	 * Parse row by row through a file.
-	 * 
-	 * @param br
-	 * @return
-	 */
-	protected ArrayList<Country> parseFile(BufferedReader br) {
-		ArrayList<Country> countries = new ArrayList<Country>();
-		String row = null;
-		try {
-			while ((row = br.readLine()) != null) {
-				countries.add(parseRow(row));
-			}
-		} catch (IOException ioe) {
-			// Print the stack trace and return what we have
-			// TODO: This needs better error handling
-			ioe.printStackTrace();
-		}
-		return countries;
-	}
 
 	/**
 	 * From a String of Fixed Position characters parse each field and populate
