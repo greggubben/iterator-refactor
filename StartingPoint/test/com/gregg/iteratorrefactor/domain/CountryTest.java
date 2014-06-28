@@ -17,13 +17,15 @@
  *    
  */
 
-package com.gregg.iteratorrefactor;
+package com.gregg.iteratorrefactor.domain;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.gregg.iteratorrefactor.domain.Country;
 
 /**
  * @author gregg

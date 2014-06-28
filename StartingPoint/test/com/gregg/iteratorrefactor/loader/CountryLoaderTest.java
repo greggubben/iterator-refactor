@@ -17,7 +17,7 @@
  *    
  */
 
-package com.gregg.iteratorrefactor;
+package com.gregg.iteratorrefactor.loader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -29,6 +29,9 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.gregg.iteratorrefactor.domain.Country;
+import com.gregg.iteratorrefactor.loader.CountryLoader;
 
 public class CountryLoaderTest {
 

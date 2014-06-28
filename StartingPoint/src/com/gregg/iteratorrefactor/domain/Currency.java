@@ -17,7 +17,7 @@
  *    
  */
 
-package com.gregg.iteratorrefactor;
+package com.gregg.iteratorrefactor.domain;
 
 /**
  * @author gregg

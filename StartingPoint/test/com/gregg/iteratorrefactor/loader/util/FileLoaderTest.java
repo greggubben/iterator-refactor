@@ -16,12 +16,14 @@
  * Contributors:
  *    
  */
-package com.gregg.iteratorrefactor;
+package com.gregg.iteratorrefactor.loader.util;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.gregg.iteratorrefactor.loader.util.FileLoader;
 
 public class FileLoaderTest {
 

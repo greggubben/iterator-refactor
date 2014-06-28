@@ -17,13 +17,16 @@
  *    
  */
 
-package com.gregg.iteratorrefactor;
+package com.gregg.iteratorrefactor.loader;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import com.gregg.iteratorrefactor.domain.Currency;
+import com.gregg.iteratorrefactor.loader.util.FileLoader;
 
 /**
  * @author gregg
